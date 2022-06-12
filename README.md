@@ -1,4 +1,5 @@
-# Amazon Invoice Automation - From SC (Invoice Data) -> Excel (Generate Invoice) -> SC (Upload Invoice)
+# Amazon Invoice Automation 
+## From SC (Invoice Data) -> Excel (Generate Invoice) -> SC (Upload Invoice)
 
 ## Steps
 
