@@ -3,7 +3,7 @@
 
 ## Steps
 
-1. Open Google Chrome
+1. Open Google Chrome in debug mode on localhost:port
 2. Open all the orders with invoices to be uploaded, in seperate tabs
 3. Loop start: Fields to be changed:
     - Ship To
