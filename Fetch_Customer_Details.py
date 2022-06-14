@@ -8,7 +8,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import time
+import os
 import json
 from collections import OrderedDict
 from CreateInvoice import create_invoice
@@ -74,16 +74,15 @@ for child_window in chwd:
     upload_button.click()
     
     # Wait for browse button to appear, then send the generated invoice via sendkeys method
-    try:
-        browse_button = WebDriverWait(driver, 8).until(
-            EC.presence_of_element_located((By.XPATH, "//*[@id='file-upload']"))
-        )
-    except:
-        print('The browse button did not appear for some odd reason')
-        driver.quit()
+    browse_button = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.XPATH, "//*[@id='file-upload']"))
+        ).send_keys(os.getcwd()+"/"+invoice_path)
+
+    print(os.getcwd()+"/"+invoice_path)
 
     break
     driver.switch_to.window(child_window)
+
 
 # print(customer_info)
 # writeToJSONFile(customer_info)

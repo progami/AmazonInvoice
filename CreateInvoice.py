@@ -1,6 +1,9 @@
 from openpyxl import Workbook, load_workbook
 import json
-EXCEL_FILE = "Notebook-Excel.xlsx"
+import pandas as pd
+import pdfkit
+
+EXCEL_FILE = "Base-Template.xlsx"
 
 # with open('Customer Info.json', 'r') as fp:
 #   customer_info = json.load(fp)
@@ -27,9 +30,17 @@ def create_invoice(Order_id, customer_info):
   Unit_price = customer_info[Order_id]['Unit_price']
   invoice_worksheet['H15'].value= float(Unit_price.replace('£',''))
 
-  invoice_path = 'Invoices/'+Order_id+'.xlsx'
-  invoice_workbook.save(invoice_path)
+  xlsx_invoice_path = 'Invoices/'+Order_id+'.xlsx'
+  invoice_workbook.save(xlsx_invoice_path)
+
+  # # convert excel to pandas df
+  # df = pd.read_excel(xlsx_invoice_path)
+  # # convert dataframe to html
+  # df.to_html("file.html")
+  # # convert html to pdf
+  # invoice_path = 'Invoices/'+Order_id+'.pdf'
+  # pdfkit.from_file("file.html", invoice_path)
   
-  return invoice_path
+  return xlsx_invoice_path
 
 
