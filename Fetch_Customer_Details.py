@@ -1,5 +1,10 @@
 # "C:\Program Files (x86)\Google\Chrome\Application" Chrome Location
-driver_path = '/home/jarawr/chromedriver'
+# launch chrome in debugging mode on port 8989
+# chrome.exe --remote-debugging-port=8989 --user-data-dir="C:\Selenium\Chrome_Test_Profile" (WINDOWS)
+# google-chrome --remote-debugging-port=8989 --user-data-dir="/home/jarawr/google_chrome_test" (UBUNTU)
+
+LINUX_CHROMEDRIVER = '/home/jarawr/chromedriver'
+WIN_CHROMEDRIVER = 'C:\Program Files (x86)\chromedriver.exe'
 
 from distutils.command.upload import upload
 from selenium import webdriver
@@ -19,16 +24,14 @@ def writeToJSONFile(data):
         json.dump(data, fp)
 
 
-# connect to chrome in debugging mode
-# chrome.exe --remote-debugging-port=8989 --user-data-dir="C:\Selenium\Chrome_Test_Profile" (WINDOWS)
-# google-chrome --remote-debugging-port=8989 --user-data-dir="/home/jarawr/google_chrome_test" (UBUNTU)
+
 opt= Options()
 opt.add_experimental_option("debuggerAddress", "localhost:8989")
-driver= webdriver.Chrome(executable_path= driver_path, chrome_options= opt)
+driver= webdriver.Chrome(executable_path= WIN_CHROMEDRIVER, chrome_options= opt)
 
 # get all windows and switch between windows
-# print("Parent window title: " + driver.title)
-#get current window handle
+
+# get current window handle
 driver.switch_to.window(driver.current_window_handle)
 # get all child windows
 chwd = driver.window_handles
@@ -67,25 +70,19 @@ for child_window in chwd:
     customer_info[Order_id.text]= {'Ship_to':Ship_to.text, "Quantity": Quantity.text, "Ship_date": Ship_date.text, "Unit_price": Unit_price.text}
 
     # Create and save invoice
-    invoice_path = create_invoice(Order_id.text, customer_info)
+    pdf_invoice_path = create_invoice(Order_id.text, customer_info)
 
     # Click on Upload button and wait
-    upload_button = driver.find_element(By.XPATH, "//*[@id='MYO-app']/div/div[1]/div[1]/div/div[1]/div[2]/div[2]/span[1]")
-    upload_button.click()
+    # upload_button = driver.find_element(By.XPATH, "//*[@id='MYO-app']/div/div[1]/div[1]/div/div[1]/div[2]/div[2]/span[1]")
+    # upload_button.click()
     
     # Wait for browse button to appear, then send the generated invoice via sendkeys method
-    browse_button = WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.XPATH, "//*[@id='file-upload']"))
-        ).send_keys(os.getcwd()+"/"+invoice_path)
+    # browse_button = WebDriverWait(driver, 5).until(
+    #     EC.presence_of_element_located((By.NAME, "invoice-file"))
+    #     ).send_keys(pdf_invoice_path)
 
-    print(os.getcwd()+"/"+invoice_path)
+    print('Path of upload pdf: ', pdf_invoice_path)
 
-    break
+    # break
     driver.switch_to.window(child_window)
-
-
-# print(customer_info)
-# writeToJSONFile(customer_info)
-
-
 
