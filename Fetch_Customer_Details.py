@@ -17,7 +17,9 @@ import time
 import json
 from collections import OrderedDict
 from CreateInvoice import create_invoice
-from selenium.common.exceptions import NoSuchElementException        
+from selenium.common.exceptions import NoSuchElementException    
+from selenium.webdriver.common.action_chains import ActionChains
+
 
 def check_exists_by_xpath(chromedriver, xpath):
     try:
@@ -99,24 +101,32 @@ for child_window in chwd:
         # time.sleep(3)
 
         # Wait for upload button to appear and click it
-        WebDriverWait(driver, 5).until(
-            EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div[2]/div/div/div[1]/div[1]/div/div[1]/div[2]/div[2]/span[1]/span'))
+        upload_button = WebDriverWait(driver, 5).until(
+            EC.presence_of_element_located((By.XPATH, '//*[@id="MYO-app"]/div/div[1]/div[1]/div/div[1]/div[2]/div[2]/span[1]/span/input'))
             ).click()
 
         # print('CLICKED THE BUTTON TO OPEN PROMPT')
         
         # Wait for browse button to appear, then send the generated invoice via sendkeys method
         browse_button = WebDriverWait(driver, 5).until(
-            EC.presence_of_element_located((By.NAME, "invoice-file"))
+            EC.presence_of_element_located((By.CSS_SELECTOR, '#file-upload'))
             ).send_keys(pdf_invoice_path)
 
-        # # fill in the document number box
-        # document_number = driver.find_element(By.XPATH, '//*[@id="invoice_number_input"]').send_keys(Order_id)
-        
-        # # wait for upload to process and document number to appear
-        # time.sleep(1)
 
-    print('Invoice Number'+str(i)+' Generated: ', pdf_invoice_path)
+        # fill in the document number box
+        
+        # doc_textbox = WebDriverWait(driver, 5).until(
+        #     EC.presence_of_element_located((By.CSS_SELECTOR, '#invoice_number_input'))
+        #     ).send_keys('1')
+        
+        # driver.implicitly_wait(10)
+
+        # ActionChains(driver).move_to_element(doc_textbox).send_keys(Order_id).perform()                    
+
+        # # wait for upload to process and document number to appear
+        # time.sleep(0.5)
+
+    print('Invoice Number '+str(i)+' Generated: ', pdf_invoice_path)
 
     # break
     driver.switch_to.window(child_window)
