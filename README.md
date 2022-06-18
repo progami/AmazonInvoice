@@ -13,3 +13,4 @@
     - Unit Price
     
 5. Write another script to use the details and generate excel invoices
+6. Works on Windows Only (win32com libraries)
